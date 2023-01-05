@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2019",
+    "lib": ["es2019", "es2020.bigint", "es2020.string", "es2020.symbol.wellknown"],
+    "declaration": false,
+    "removeComments": true,
+    "sourceMap": false,
+    "strict": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "skipLibCheck": true,
+    "types": ["node"],
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "noImplicitAny": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["./node_modules", "./node_modules/*", "./node_modules/@types/**/*"]
+}
