@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getUser, listUsers, allUsers } from './clients/user';
+import { getUser, listUsers, listStreamUsers, allUsers } from './clients/user';
 
 const app: express.Express = express();
 app.use(express.json());
@@ -19,6 +19,17 @@ app.get('/users', async (req: express.Request, res: express.Response) => {
   try {
     const { limit, offset } = req.query;
     const response = await listUsers(limit ? Number(limit) : 0, offset ? Number(offset) : 0);
+    res.status(200).json(response.toObject());
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.get('/users-stream', async (req: express.Request, res: express.Response) => {
+  try {
+    const { limit, offset } = req.query;
+    const response = await listStreamUsers(limit ? Number(limit) : 0, offset ? Number(offset) : 0);
     res.status(200).json(response.toObject());
   } catch (error: any) {
     console.error(error);

@@ -3,10 +3,10 @@ import * as grpc from '@grpc/grpc-js';
 import { UserService } from '../generated/user_grpc_pb';
 import { UserInfo, GetUserResponse, ListUsersResponse } from '../generated/user_pb';
 
-const dumyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
+const dummyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
 
 const getUser = (call, callback) => {
-  const user = dumyUsers.filter((dumyUser) => dumyUser.id === call.request.getId()).shift();
+  const user = dummyUsers.filter((dumyUser) => dumyUser.id === call.request.getId()).shift();
 
   if (user) {
     const userInfo = new UserInfo();
@@ -30,13 +30,13 @@ const getUser = (call, callback) => {
 };
 
 const listUsers = (call, callback) => {
-  const limit = call.request.hasLimit() ? call.request.getLimit() : 10;
+  const limit = call.request.hasLimit() ? call.request.getLimit() : -1;
   const offset = call.request.hasOffset() ? call.request.getOffset() : 0;
 
   const reply = new ListUsersResponse();
-  reply.setTotal(dumyUsers.length);
+  reply.setTotal(dummyUsers.length);
 
-  const users = dumyUsers.slice(offset).slice(0, limit);
+  const users = dummyUsers.slice(offset).slice(0, limit);
   users.forEach((user, index) => {
     const userInfo = new UserInfo();
     userInfo.setId(user.id);
@@ -45,15 +45,45 @@ const listUsers = (call, callback) => {
     userInfo.setCreatedAt(user.createdAt);
     userInfo.setUpdatedAt(user.updatedAt);
     reply.addUsers(userInfo, index);
-    console.log(userInfo);
   });
 
   callback(null, reply);
 };
 
+const listStreamUsers = async (call) => {
+  const limit = call.request.hasLimit() ? call.request.getLimit() : -1;
+  const offset = call.request.hasOffset() ? call.request.getOffset() : 0;
+
+  // response with stream for every 1 second
+  let p = Promise.resolve();
+  const users = dummyUsers.slice(offset).slice(0, limit);
+  const f = (v) =>
+    new Promise<void>((resolve) =>
+      setTimeout(() => {
+        const userInfo = new UserInfo();
+        userInfo.setId(v.id);
+        userInfo.setEmail(v.email);
+        userInfo.setFullName(v.fullName);
+        userInfo.setCreatedAt(v.createdAt);
+        userInfo.setUpdatedAt(v.updatedAt);
+
+        const reply = new GetUserResponse();
+        reply.setUser(userInfo);
+        call.write(reply);
+        console.log('server:', reply);
+        resolve();
+      }, Math.random() * 1000)
+    );
+
+  users.forEach((v) => (p = p.then(() => f(v))));
+  await p;
+
+  call.end();
+};
+
 const allUsers = (call, callback) => {
   // 省略
-  //   const users = dumyUsers.slice(offset).slice(0, limit);
+  //   const users = dummyUsers.slice(offset).slice(0, limit);
 };
 
 const server = new grpc.Server();
@@ -61,7 +91,8 @@ const server = new grpc.Server();
 server.addService(UserService, {
   getUser,
   listUsers,
-  allUsers
+  allUsers,
+  listStreamUsers
 });
 
 server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), (e, port) => {

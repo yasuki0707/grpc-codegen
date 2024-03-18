@@ -12,11 +12,15 @@ npm install
 
 ### Stub generation
 
-#### Prepare `.proto` file
+#### Prepare `.proto` file(e.g. user.proto)
+
+```sh
+mkdir user.proto
+```
+
+#### Then edit it like below:
 
 ```proto
-# e.g. user.proto
-
 syntax = "proto3";
 
 package user;
@@ -90,4 +94,34 @@ By using a tool like `BloomRPC` you can easily check whether it works.
 ```sh
 # install BloomRPC
 brew install --cask bloomrpc
+```
+
+In case you had an error like below:
+
+```
+Error: /opt/homebrew/Cellar is not writable. You should change the
+ownership and permissions of /opt/homebrew/Cellar back to your
+user account:
+sudo chown -R $(whoami) /opt/homebrew/Cellar
+==> Tapping homebrew/cask
+fatal: could not create work tree dir '/opt/homebrew/Library/Taps/homebrew/homebrew-cask': Permission denied
+Error: Failure while executing; `git clone https://github.com/Homebrew/homebrew-cask /opt/homebrew/Library/Taps/homebrew/homebrew-cask --origin=origin --template=` exited with 128.
+```
+
+do this:
+
+```
+sudo chown -R $(whoami) /opt/homebrew/Cellar
+
+brew install --cask bloomrpc
+```
+
+```
+Error: /opt/homebrew is not writable. You should change the
+ownership and permissions of /opt/homebrew back to your
+user account:
+  sudo chown -R $(whoami) /opt/homebrew
+==> Tapping homebrew/cask
+fatal: could not create work tree dir '/opt/homebrew/Library/Taps/homebrew/homebrew-cask': Permission denied
+Error: Failure while executing; `git clone https://github.com/Homebrew/homebrew-cask /opt/homebrew/Library/Taps/homebrew/homebrew-cask --origin=origin --template=` exited with 128.
 ```

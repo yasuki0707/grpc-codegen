@@ -1,7 +1,13 @@
 import * as grpc from '@grpc/grpc-js';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
 import { UserClient } from '../../generated/user_grpc_pb';
-import { GetUserRequest, GetUserResponse, ListUsersRequest, ListUsersResponse } from '../../generated/user_pb';
+import {
+  GetUserRequest,
+  GetUserResponse,
+  ListUsersRequest,
+  ListUsersResponse,
+  UserInfo
+} from '../../generated/user_pb';
 
 const client = new UserClient('0.0.0.0:50051', grpc.credentials.createInsecure());
 
@@ -32,8 +38,42 @@ const listUsers = (limit?: number, offset?: number): Promise<ListUsersResponse> 
   });
 };
 
+const listStreamUsers = (limit?: number, offset?: number): Promise<ListUsersResponse> => {
+  const request = new ListUsersRequest();
+  if (!!limit) request.setLimit(limit);
+  if (!!offset) request.setOffset(offset);
+
+  return new Promise((resolve) => {
+    const call = client.listStreamUsers(request);
+    const res = new ListUsersResponse();
+    call.on('data', (response) => {
+      // user ごとのデータが stream の一単位として送られてくる
+      const userInfo = new UserInfo();
+      const user = response.array[0];
+      userInfo.setId(user[0]);
+      userInfo.setEmail(user[1]);
+      userInfo.setFullName(user[2]);
+      userInfo.setCreatedAt(user[3]);
+      userInfo.setUpdatedAt(user[4]);
+      res.addUsers(userInfo, res.getTotal());
+      res.setTotal(res.getTotal() + 1);
+      console.log('client:', userInfo);
+    });
+    call.on('end', () => {
+      console.log('number of users:', res.getTotal());
+      resolve(res);
+    });
+    call.on('error', (err) => {
+      console.log(err);
+    });
+    call.on('status', (status) => {
+      console.log('status:', status);
+    });
+  });
+};
+
 const allUsers = () => {
   // 省略
 };
 
-export { getUser, listUsers, allUsers };
+export { getUser, listUsers, listStreamUsers, allUsers };

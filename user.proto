@@ -8,6 +8,7 @@ import "google/protobuf/wrappers.proto";
 service User {
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
+  rpc ListStreamUsers(ListUsersRequest) returns (stream GetUserResponse) {}
   rpc AllUsers(google.protobuf.Empty) returns (ListUsersResponse) {}
 }
 
