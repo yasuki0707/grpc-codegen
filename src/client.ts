@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getUser, listUsers, listStreamUsers, allUsers } from './clients/user';
+import { getUser, listUsers, listStreamUsers, allUsers, updateUser } from './clients/user';
 
 const app: express.Express = express();
 app.use(express.json());
@@ -30,6 +30,20 @@ app.get('/users-stream', async (req: express.Request, res: express.Response) => 
   try {
     const { limit, offset } = req.query;
     const response = await listStreamUsers(limit ? Number(limit) : 0, offset ? Number(offset) : 0);
+    res.status(200).json(response.toObject());
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.put('/users/:id', async (req: express.Request, res: express.Response) => {
+  try {
+    const email = req.body.email;
+    const fullName = req.body.fullName;
+    const createdAt = req.body.createdAt;
+    const updatedAt = req.body.updatedAt;
+    const response = await updateUser(parseInt(req.params.id), email, fullName, createdAt, updatedAt);
     res.status(200).json(response.toObject());
   } catch (error: any) {
     console.error(error);

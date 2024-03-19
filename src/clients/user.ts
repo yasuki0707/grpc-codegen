@@ -6,8 +6,11 @@ import {
   GetUserResponse,
   ListUsersRequest,
   ListUsersResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
   UserInfo,
-  UserDetail
+  UserDetail,
+  UpdateUserInfo
 } from '../../generated/user_pb';
 
 const client = new UserClient('0.0.0.0:50051', grpc.credentials.createInsecure());
@@ -76,8 +79,37 @@ const listStreamUsers = (limit?: number, offset?: number): Promise<ListUsersResp
   });
 };
 
+const updateUser = (
+  id: number,
+  email?: string,
+  fullName?: string,
+  createdAt?: number,
+  updatedAt?: number
+): Promise<UpdateUserResponse> => {
+  const detail = new UserDetail();
+  email && detail.setEmail(email);
+  fullName && detail.setFullName(fullName);
+  createdAt && detail.setCreatedAt(createdAt);
+  updatedAt && detail.setUpdatedAt(updatedAt);
+
+  const user = new UpdateUserInfo();
+  user.setId(id);
+  user.setDetail(detail);
+
+  const request = new UpdateUserRequest();
+  request.setUser(user);
+
+  return new Promise((resolve, reject) => {
+    client.updateUser(request, (err, response) => {
+      if (err) reject(err);
+      if (response === undefined) return;
+      resolve(response);
+    });
+  });
+};
+
 const allUsers = () => {
   // 省略
 };
 
-export { getUser, listUsers, listStreamUsers, allUsers };
+export { getUser, listUsers, listStreamUsers, allUsers, updateUser };

@@ -10,6 +10,7 @@ service User {
   rpc ListUsers(ListUsersRequest) returns (ListUsersResponse) {}
   rpc ListStreamUsers(ListUsersRequest) returns (stream GetUserResponse) {}
   rpc AllUsers(google.protobuf.Empty) returns (ListUsersResponse) {}
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
 }
 
 message GetUserRequest {

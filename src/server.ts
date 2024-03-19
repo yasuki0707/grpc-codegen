@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as grpc from '@grpc/grpc-js';
 import { UserService } from '../generated/user_grpc_pb';
-import { UserInfo, UserDetail, GetUserResponse, ListUsersResponse } from '../generated/user_pb';
+import { UserInfo, UserDetail, GetUserResponse, ListUsersResponse, UpdateUserResponse } from '../generated/user_pb';
 
 const dummyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
 
@@ -90,6 +90,31 @@ const listStreamUsers = async (call) => {
   call.end();
 };
 
+const updateUser = (call, callback) => {
+  const userId = call.request.getUser().getId();
+  const email = call.request.getUser().getDetail().getEmail();
+  const fullName = call.request.getUser().getDetail().getFullName();
+  const createdAt = call.request.getUser().getDetail().getCreatedAt();
+  const updatedAt = call.request.getUser().getDetail().getUpdatedAt();
+
+  // return object assuming it has been updated
+  const userDetail = new UserDetail();
+  userDetail.setEmail(email || 'default_email');
+  userDetail.setFullName(fullName || 'default_fullName');
+  userDetail.setCreatedAt(createdAt || 0);
+  userDetail.setUpdatedAt(updatedAt || 0);
+
+  const userInfo = new UserInfo();
+  userInfo.setId(userId);
+  userInfo.setDetail(userDetail);
+  console.log(userInfo);
+
+  const reply = new UpdateUserResponse();
+  reply.setUser(userInfo);
+
+  return callback(null, reply);
+};
+
 const allUsers = (call, callback) => {
   // 省略
   //   const users = dummyUsers.slice(offset).slice(0, limit);
@@ -101,7 +126,8 @@ server.addService(UserService, {
   getUser,
   listUsers,
   allUsers,
-  listStreamUsers
+  listStreamUsers,
+  updateUser
 });
 
 server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), (e, port) => {
