@@ -6,7 +6,8 @@ import {
   GetUserResponse,
   ListUsersRequest,
   ListUsersResponse,
-  UserInfo
+  UserInfo,
+  UserDetail
 } from '../../generated/user_pb';
 
 const client = new UserClient('0.0.0.0:50051', grpc.credentials.createInsecure());
@@ -51,10 +52,13 @@ const listStreamUsers = (limit?: number, offset?: number): Promise<ListUsersResp
       const userInfo = new UserInfo();
       const user = response.array[0];
       userInfo.setId(user[0]);
-      userInfo.setEmail(user[1]);
-      userInfo.setFullName(user[2]);
-      userInfo.setCreatedAt(user[3]);
-      userInfo.setUpdatedAt(user[4]);
+
+      const userDetail = new UserDetail();
+      userDetail.setEmail(user[1][0]);
+      userDetail.setFullName(user[1][1]);
+      userDetail.setCreatedAt(user[1][2]);
+      userDetail.setUpdatedAt(user[1][3]);
+      userInfo.setDetail(userDetail);
       res.addUsers(userInfo, res.getTotal());
       res.setTotal(res.getTotal() + 1);
       console.log('client:', userInfo);

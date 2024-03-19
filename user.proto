@@ -20,6 +20,14 @@ message GetUserResponse {
   UserInfo user = 1;
 }
 
+message UpdateUserRequest {
+  UpdateUserInfo user = 1;
+}
+
+message UpdateUserResponse {
+  UserInfo user = 1;
+}
+
 message ListUsersRequest {
   google.protobuf.Int32Value limit = 1;
   google.protobuf.Int32Value offset = 2;
@@ -32,8 +40,17 @@ message ListUsersResponse {
 
 message UserInfo {
   int32 id = 1;
-  string email = 2;
-  string full_name = 3;
-  int64 created_at = 4;
-  int64 updated_at = 5;
+  UserDetail detail = 2;
+}
+
+message UpdateUserInfo {
+  int32 id = 1;
+  optional UserDetail detail = 2;
+}
+
+message UserDetail {
+  string email = 1;
+  string full_name = 2;
+  int64 created_at = 3;
+  int64 updated_at = 4;
 }

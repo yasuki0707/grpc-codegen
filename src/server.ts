@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as grpc from '@grpc/grpc-js';
 import { UserService } from '../generated/user_grpc_pb';
-import { UserInfo, GetUserResponse, ListUsersResponse } from '../generated/user_pb';
+import { UserInfo, UserDetail, GetUserResponse, ListUsersResponse } from '../generated/user_pb';
 
 const dummyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
 
@@ -9,12 +9,15 @@ const getUser = (call, callback) => {
   const user = dummyUsers.filter((dumyUser) => dumyUser.id === call.request.getId()).shift();
 
   if (user) {
+    const userDetail = new UserDetail();
+    userDetail.setEmail(user.email);
+    userDetail.setFullName(user.fullName);
+    userDetail.setCreatedAt(user.createdAt);
+    userDetail.setUpdatedAt(user.updatedAt);
+
     const userInfo = new UserInfo();
     userInfo.setId(user.id);
-    userInfo.setEmail(user.email);
-    userInfo.setFullName(user.fullName);
-    userInfo.setCreatedAt(user.createdAt);
-    userInfo.setUpdatedAt(user.updatedAt);
+    userInfo.setDetail(userDetail);
     console.log(userInfo);
 
     const reply = new GetUserResponse();
@@ -30,7 +33,7 @@ const getUser = (call, callback) => {
 };
 
 const listUsers = (call, callback) => {
-  const limit = call.request.hasLimit() ? call.request.getLimit() : -1;
+  const limit = call.request.hasLimit() ? call.request.getLimit() : 100;
   const offset = call.request.hasOffset() ? call.request.getOffset() : 0;
 
   const reply = new ListUsersResponse();
@@ -38,12 +41,15 @@ const listUsers = (call, callback) => {
 
   const users = dummyUsers.slice(offset).slice(0, limit);
   users.forEach((user, index) => {
+    const userDetail = new UserDetail();
+    userDetail.setEmail(user.email);
+    userDetail.setFullName(user.fullName);
+    userDetail.setCreatedAt(user.createdAt);
+    userDetail.setUpdatedAt(user.updatedAt);
+
     const userInfo = new UserInfo();
     userInfo.setId(user.id);
-    userInfo.setEmail(user.email);
-    userInfo.setFullName(user.fullName);
-    userInfo.setCreatedAt(user.createdAt);
-    userInfo.setUpdatedAt(user.updatedAt);
+    userInfo.setDetail(userDetail);
     reply.addUsers(userInfo, index);
   });
 
@@ -51,7 +57,7 @@ const listUsers = (call, callback) => {
 };
 
 const listStreamUsers = async (call) => {
-  const limit = call.request.hasLimit() ? call.request.getLimit() : -1;
+  const limit = call.request.hasLimit() ? call.request.getLimit() : 100;
   const offset = call.request.hasOffset() ? call.request.getOffset() : 0;
 
   // response with stream for every 1 second
@@ -60,12 +66,15 @@ const listStreamUsers = async (call) => {
   const f = (v) =>
     new Promise<void>((resolve) =>
       setTimeout(() => {
+        const userDetail = new UserDetail();
+        userDetail.setEmail(v.email);
+        userDetail.setFullName(v.fullName);
+        userDetail.setCreatedAt(v.createdAt);
+        userDetail.setUpdatedAt(v.updatedAt);
+
         const userInfo = new UserInfo();
         userInfo.setId(v.id);
-        userInfo.setEmail(v.email);
-        userInfo.setFullName(v.fullName);
-        userInfo.setCreatedAt(v.createdAt);
-        userInfo.setUpdatedAt(v.updatedAt);
+        userInfo.setDetail(userDetail);
 
         const reply = new GetUserResponse();
         reply.setUser(userInfo);
