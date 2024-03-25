@@ -8,6 +8,7 @@ import {
   ListUsersResponse,
   UpdateUserRequest,
   UpdateUserResponse,
+  UpdateUsersResponse,
   UserInfo,
   UserDetail,
   UpdateUserInfo
@@ -111,8 +112,54 @@ const updateUser = (
   });
 };
 
+interface User {
+  id: number;
+  email?: string;
+  fullName?: string;
+  createdAt?: number;
+  updatedAt?: number;
+}
+const updateStreamUsers = async (users: User[]): Promise<UpdateUsersResponse> => {
+  return new Promise(async (resolve) => {
+    const apiRequestStream = client.updateStreamUsers((err, value) => {
+      if (err) console.error('error on server:', err);
+      if (value === undefined) return;
+      console.log(`completed: ${value.getUsersList().length} users have been updated.`);
+      resolve(value);
+    });
+
+    let p = Promise.resolve();
+
+    const f = (v) =>
+      new Promise<void>((resolve) =>
+        setTimeout(() => {
+          console.log('client:', v);
+          const userDetail = new UserDetail();
+          userDetail.setEmail(v.email);
+          userDetail.setFullName(v.fullName);
+          userDetail.setCreatedAt(v.createdAt);
+          userDetail.setUpdatedAt(v.updatedAt);
+
+          const userInfo = new UserInfo();
+          userInfo.setId(v.id);
+          userInfo.setDetail(userDetail);
+
+          const reply = new UpdateUserRequest();
+          reply.setUser(userInfo);
+          apiRequestStream.write(reply);
+          resolve();
+        }, Math.random() * 1000)
+      );
+
+    users.forEach((v) => (p = p.then(() => f(v))));
+    await p;
+
+    apiRequestStream.end();
+  });
+};
+
 const allUsers = () => {
   // 省略
 };
 
-export { getUser, listUsers, listStreamUsers, allUsers, updateUser };
+export { getUser, listUsers, listStreamUsers, allUsers, updateUser, updateStreamUsers };

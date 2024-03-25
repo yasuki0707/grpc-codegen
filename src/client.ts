@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getUser, listUsers, listStreamUsers, allUsers, updateUser } from './clients/user';
+import { getUser, listUsers, listStreamUsers, allUsers, updateUser, updateStreamUsers } from './clients/user';
 
 const app: express.Express = express();
 app.use(express.json());
@@ -44,6 +44,17 @@ app.put('/users/:id', async (req: express.Request, res: express.Response) => {
     const createdAt = req.body.createdAt;
     const updatedAt = req.body.updatedAt;
     const response = await updateUser(parseInt(req.params.id), email, fullName, createdAt, updatedAt);
+    res.status(200).json(response.toObject());
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+app.patch('/users', async (req: express.Request, res: express.Response) => {
+  try {
+    const users = req.body.users;
+    const response = await updateStreamUsers(users);
     res.status(200).json(response.toObject());
   } catch (error: any) {
     console.error(error);

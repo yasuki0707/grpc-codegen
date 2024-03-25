@@ -11,6 +11,7 @@ service User {
   rpc ListStreamUsers(ListUsersRequest) returns (stream GetUserResponse) {}
   rpc AllUsers(google.protobuf.Empty) returns (ListUsersResponse) {}
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
+  rpc UpdateStreamUsers(stream UpdateUserRequest) returns (UpdateUsersResponse) {}
 }
 
 message GetUserRequest {
@@ -27,6 +28,10 @@ message UpdateUserRequest {
 
 message UpdateUserResponse {
   UserInfo user = 1;
+}
+
+message UpdateUsersResponse {
+  repeated UserInfo users = 1;
 }
 
 message ListUsersRequest {
