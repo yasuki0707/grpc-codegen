@@ -102,7 +102,10 @@ const updateUser = (
   return new Promise((resolve, reject) => {
     client.updateUser(request, (err, response) => {
       if (err) reject(err);
-      if (response === undefined) return;
+      if (response === undefined) {
+        reject('response is undefined');
+        return;
+      }
       resolve(response);
     });
   });
