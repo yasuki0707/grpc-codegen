@@ -1,7 +1,14 @@
 import * as fs from 'fs';
 import * as grpc from '@grpc/grpc-js';
 import { UserService } from '../generated/user_grpc_pb';
-import { UserInfo, UserDetail, GetUserResponse, ListUsersResponse, UpdateUserResponse } from '../generated/user_pb';
+import {
+  UserInfo,
+  UserDetail,
+  GetUserResponse,
+  ListUsersResponse,
+  UpdateUserResponse,
+  UpdateUsersResponse
+} from '../generated/user_pb';
 
 const dummyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
 
@@ -119,6 +126,42 @@ const updateUser = (call, callback) => {
   return callback(null, reply);
 };
 
+const updateStreamUsers = (call, callback) => {
+  const res = new UpdateUsersResponse();
+  call.on('data', (user) => {
+    const userId = user.getUser().getId();
+    const email = user.getUser().getDetail().getEmail();
+    const fullName = user.getUser().getDetail().getFullName();
+    const createdAt = user.getUser().getDetail().getCreatedAt();
+    const updatedAt = user.getUser().getDetail().getUpdatedAt();
+
+    const existingUser = dummyUsers.filter((u) => u.id === userId).shift();
+
+    if (!existingUser) return;
+
+    const userDetail = new UserDetail();
+    userDetail.setEmail(email || existingUser.email);
+    userDetail.setFullName(fullName || existingUser.fullName);
+    userDetail.setCreatedAt(createdAt || existingUser.createdAt);
+    userDetail.setUpdatedAt(updatedAt || existingUser.updatedAt);
+
+    const userInfo = new UserInfo();
+    userInfo.setId(userId);
+    userInfo.setDetail(userDetail);
+    console.log(userInfo);
+
+    const cnt = res.getUsersList().length;
+    res.addUsers(userInfo, cnt);
+  });
+
+  call.on('end', () => {
+    callback(null, res);
+  });
+  call.on('error', (e) => {
+    console.log('on error', e);
+  });
+};
+
 const allUsers = (call, callback) => {
   // 省略
   //   const users = dummyUsers.slice(offset).slice(0, limit);
@@ -131,7 +174,8 @@ server.addService(UserService, {
   listUsers,
   allUsers,
   listStreamUsers,
-  updateUser
+  updateUser,
+  updateStreamUsers
 });
 
 server.bindAsync('0.0.0.0:50051', grpc.ServerCredentials.createInsecure(), (e, port) => {
