@@ -6,7 +6,7 @@ import { UserInfo, UserDetail, GetUserResponse, ListUsersResponse, UpdateUserRes
 const dummyUsers = JSON.parse(fs.readFileSync('./db/user.json', 'utf8'));
 
 const getUser = (call, callback) => {
-  const user = dummyUsers.filter((dumyUser) => dumyUser.id === call.request.getId()).shift();
+  const user = dummyUsers.filter((u) => u.id === call.request.getId()).shift();
 
   if (user) {
     const userDetail = new UserDetail();
@@ -97,20 +97,24 @@ const updateUser = (call, callback) => {
   const createdAt = call.request.getUser().getDetail().getCreatedAt();
   const updatedAt = call.request.getUser().getDetail().getUpdatedAt();
 
-  // return object assuming it has been updated
-  const userDetail = new UserDetail();
-  userDetail.setEmail(email || 'default_email');
-  userDetail.setFullName(fullName || 'default_fullName');
-  userDetail.setCreatedAt(createdAt || 0);
-  userDetail.setUpdatedAt(updatedAt || 0);
-
-  const userInfo = new UserInfo();
-  userInfo.setId(userId);
-  userInfo.setDetail(userDetail);
-  console.log(userInfo);
-
   const reply = new UpdateUserResponse();
-  reply.setUser(userInfo);
+  const existingUser = dummyUsers.filter((u) => u.id === userId).shift();
+
+  if (existingUser) {
+    // return object assuming it has been updated
+    const userDetail = new UserDetail();
+    userDetail.setEmail(email || existingUser.email);
+    userDetail.setFullName(fullName || existingUser.fullName);
+    userDetail.setCreatedAt(createdAt || existingUser.createdAt);
+    userDetail.setUpdatedAt(updatedAt || existingUser.updatedAt);
+
+    const userInfo = new UserInfo();
+    userInfo.setId(userId);
+    userInfo.setDetail(userDetail);
+    console.log(userInfo);
+
+    reply.setUser(userInfo);
+  }
 
   return callback(null, reply);
 };
