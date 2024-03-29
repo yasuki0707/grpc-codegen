@@ -148,7 +148,7 @@ const updateStreamUsers = (call, callback) => {
     const userInfo = new UserInfo();
     userInfo.setId(userId);
     userInfo.setDetail(userDetail);
-    console.log(userInfo);
+    console.log('receive from client:', userInfo.toObject());
 
     const cnt = res.getUsersList().length;
     res.addUsers(userInfo, cnt);

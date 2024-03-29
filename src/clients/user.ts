@@ -124,7 +124,7 @@ const updateStreamUsers = async (users: User[]): Promise<UpdateUsersResponse> =>
     const apiRequestStream = client.updateStreamUsers((err, value) => {
       if (err) console.error('error on server:', err);
       if (value === undefined) return;
-      console.log(`completed: ${value.getUsersList().length} users have been updated.`);
+      console.log(`completed: ${value.getUsersList().length} user(s) have been updated.`);
       resolve(value);
     });
 
@@ -133,7 +133,6 @@ const updateStreamUsers = async (users: User[]): Promise<UpdateUsersResponse> =>
     const f = (v) =>
       new Promise<void>((resolve) =>
         setTimeout(() => {
-          console.log('client:', v);
           const userDetail = new UserDetail();
           userDetail.setEmail(v.email);
           userDetail.setFullName(v.fullName);
@@ -144,9 +143,11 @@ const updateStreamUsers = async (users: User[]): Promise<UpdateUsersResponse> =>
           userInfo.setId(v.id);
           userInfo.setDetail(userDetail);
 
-          const reply = new UpdateUserRequest();
-          reply.setUser(userInfo);
-          apiRequestStream.write(reply);
+          console.log('sent from client:', userInfo.toObject());
+
+          const request = new UpdateUserRequest();
+          request.setUser(userInfo);
+          apiRequestStream.write(request);
           resolve();
         }, Math.random() * 1000)
       );
