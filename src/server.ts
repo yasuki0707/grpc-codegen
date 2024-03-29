@@ -86,7 +86,7 @@ const listStreamUsers = async (call) => {
         const reply = new GetUserResponse();
         reply.setUser(userInfo);
         call.write(reply);
-        console.log('server:', reply);
+        console.log('sent from server:', userInfo.toObject());
         resolve();
       }, Math.random() * 1000)
     );

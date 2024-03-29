@@ -65,7 +65,7 @@ const listStreamUsers = (limit?: number, offset?: number): Promise<ListUsersResp
       userInfo.setDetail(userDetail);
       res.addUsers(userInfo, res.getTotal());
       res.setTotal(res.getTotal() + 1);
-      console.log('client:', userInfo);
+      console.log('receive at client:', userInfo.toObject());
     });
     call.on('end', () => {
       console.log('number of users:', res.getTotal());

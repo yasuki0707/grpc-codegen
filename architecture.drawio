@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="1zJ82RBbaM2W8bQ031AX" name="Page-1">
-        <mxGraphModel dx="293" dy="403" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="1658" dy="548" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -45,6 +45,114 @@
                 </mxCell>
                 <mxCell id="34" value="REST API" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="38" vertex="1">
                     <mxGeometry x="128" y="15" width="86" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="50" y="780" width="590" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="39">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="470" y="10" as="targetPoint"/>
+                        <mxPoint x="370" y="10" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="41" value="gRPC クライアント&lt;br&gt;(Express サーバー)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="39">
+                    <mxGeometry x="230" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="gRPC サーバー&lt;br&gt;(ダミーDB含む)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="39">
+                    <mxGeometry x="490" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="クライアント&lt;br&gt;(Postman/Curl)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="39">
+                    <mxGeometry width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="39">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="366" y="50" as="targetPoint"/>
+                        <mxPoint x="470" y="50" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="45" value="gRPC 通信" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="39">
+                    <mxGeometry x="374" y="15" width="86" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="39">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="224" y="10" as="targetPoint"/>
+                        <mxPoint x="124" y="10" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="47" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="39">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="120" y="50" as="targetPoint"/>
+                        <mxPoint x="224" y="50" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="48" value="REST API" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="39">
+                    <mxGeometry x="128" y="15" width="86" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="streaming!" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;direction=west;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="840" width="110" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="unary call" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;direction=east;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="710" width="80" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;fontColor=#000000;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="-10" y="680" width="670" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="サーバーサイド・ストリーミング" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry y="700" width="230" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="50" y="1070" width="590" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="54">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="470" y="10" as="targetPoint"/>
+                        <mxPoint x="370" y="10" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="gRPC クライアント&lt;br&gt;(Express サーバー)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="54">
+                    <mxGeometry x="230" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="57" value="gRPC サーバー&lt;br&gt;(ダミーDB含む)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="54">
+                    <mxGeometry x="490" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="58" value="クライアント&lt;br&gt;(Postman/Curl)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2f4b58;fontColor=#ffffff;strokeColor=#2F4B58;" vertex="1" parent="54">
+                    <mxGeometry width="110" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="59" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="54">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="366" y="50" as="targetPoint"/>
+                        <mxPoint x="470" y="50" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="60" value="gRPC 通信" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="54">
+                    <mxGeometry x="374" y="15" width="86" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="61" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="54">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="224" y="10" as="targetPoint"/>
+                        <mxPoint x="124" y="10" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="62" style="edgeStyle=none;html=1;strokeColor=#000000;" edge="1" parent="54">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="120" y="50" as="targetPoint"/>
+                        <mxPoint x="224" y="50" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="63" value="REST API" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="54">
+                    <mxGeometry x="128" y="15" width="86" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="67" value="" style="rounded=0;whiteSpace=wrap;html=1;fontSize=16;fontColor=#000000;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="-10" y="970" width="670" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="64" value="&lt;span style=&quot;font-size: 12px; font-weight: 400;&quot;&gt;unary call&lt;/span&gt;" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;direction=west;fontStyle=1;fontSize=16;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="1130" width="80" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="65" value="streaming!" style="shape=callout;whiteSpace=wrap;html=1;perimeter=calloutPerimeter;direction=east;fontSize=16;fontStyle=1" vertex="1" parent="1">
+                    <mxGeometry x="440" y="1000" width="110" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="66" value="クライアントサイド・ストリーミング" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry y="990" width="230" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
